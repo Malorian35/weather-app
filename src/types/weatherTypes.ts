@@ -5,7 +5,7 @@ export interface Weather {
   icon: string;
 }
 
-export interface CurrentWeather {
+export interface CurrentWeatherData {
   dt: number;
   temp: number;
   feels_like: number;
@@ -18,15 +18,11 @@ export interface CurrentWeather {
   wind_speed: number;
   wind_deg: number;
   weather: Weather[];
+  name?: string;
 }
 
-export interface DailyForecast {
+export interface DailyForecastData {
   dt: number;
-  sunrise: number;
-  sunset: number;
-  moonrise: number;
-  moonset: number;
-  moon_phase: number;
   temp: {
     day: number;
     min: number;
@@ -35,28 +31,14 @@ export interface DailyForecast {
     eve: number;
     morn: number;
   };
-  feels_like: {
-    day: number;
-    night: number;
-    eve: number;
-    morn: number;
-  };
-  pressure: number;
-  humidity: number;
-  dew_point: number;
-  wind_speed: number;
-  wind_deg: number;
   weather: Weather[];
-  clouds: number;
-  pop: number;
-  uvi: number;
-  rain?: number;
+  wind_speed: number;
   summary?: string;
 }
 
-export interface WeatherData {
-  current: CurrentWeather;
-  daily: DailyForecast[];
+export interface WeatherApiResponse {
+  current: CurrentWeatherData;
+  daily: DailyForecastData[];
 }
 
 export interface City {

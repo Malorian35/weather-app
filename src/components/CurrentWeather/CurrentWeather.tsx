@@ -1,24 +1,31 @@
 import React from 'react';
-import { CurrentWeather, Weather } from '../../types/weatherTypes';
+import { CurrentWeatherData, Weather } from '../../types/weatherTypes';
+import './CurrentWeather.scss';
 
-interface CurrentWeatherProps {
-  data: CurrentWeather;
+interface CurrentWeatherComponentProps {
+  data: CurrentWeatherData;
 }
 
-const CurrentWeather: React.FC<CurrentWeatherProps> = ({ data }) => {
+const CurrentWeatherComponent: React.FC<CurrentWeatherComponentProps> = ({ data }) => {
+  if (!data?.weather?.length) {
+    return <div className="current-weather error">Нет данных о текущей погоде</div>;
+  }
+
   const weather: Weather = data.weather[0];
-  const iconUrl = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
+  const iconUrl = `https://openweathermap.org/img/wn/${weather.icon}@4x.png`;
 
   return (
     <div className="current-weather">
-      <h2>Текущая погода</h2>
+      <h2>Текущая погода {data.name && `в ${data.name}`}</h2>
       <div className="weather-info">
         <div className="weather-main">
-          <img src={iconUrl} alt={weather.description} />
+          <img src={iconUrl} alt={weather.description} className="weather-icon" />
           <div className="temperature">{Math.round(data.temp)}°C</div>
         </div>
         <div className="weather-details">
-          <div className="weather-description">{weather.description}</div>
+          <div className="weather-description">
+            {weather.description.charAt(0).toUpperCase() + weather.description.slice(1)}
+          </div>
           <div className="weather-wind">
             <span>Ветер: </span>
             {Math.round(data.wind_speed)} м/с
@@ -33,4 +40,4 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({ data }) => {
   );
 };
 
-export default CurrentWeather;
+export default CurrentWeatherComponent;
