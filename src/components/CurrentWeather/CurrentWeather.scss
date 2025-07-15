@@ -1,0 +1,146 @@
+.current-weather {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  }
+
+  h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: "🌤️";
+      margin-right: 10px;
+    }
+  }
+
+  .weather-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .weather-main {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      img {
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+      }
+
+      .temperature {
+        font-size: 3.5rem;
+        font-weight: 300;
+        color: #2c3e50;
+        position: relative;
+
+        &::after {
+          content: "°C";
+          font-size: 1.5rem;
+          position: absolute;
+          top: 5px;
+          right: -25px;
+        }
+      }
+    }
+
+    .weather-details {
+      flex: 1;
+
+      .weather-description {
+        text-transform: capitalize;
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        color: #34495e;
+        font-weight: 500;
+      }
+
+      .weather-wind,
+      .weather-humidity,
+      .weather-pressure {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 1.1rem;
+        color: #7f8c8d;
+
+        span {
+          font-weight: 500;
+          color: #2c3e50;
+          min-width: 120px;
+          display: inline-block;
+        }
+
+        &::before {
+          margin-right: 10px;
+          font-size: 1.2rem;
+        }
+      }
+
+      .weather-wind::before {
+        content: "💨";
+      }
+
+      .weather-humidity::before {
+        content: "💧";
+      }
+
+      .weather-pressure::before {
+        content: "📊";
+      }
+    }
+  }
+}
+
+.dark-mode {
+  .current-weather {
+    background: linear-gradient(135deg, #2d3436 0%, #1e272e 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+
+    h2, .temperature, .weather-details span {
+      color: #f5f6fa;
+    }
+
+    .weather-description, .weather-wind, .weather-humidity, .weather-pressure {
+      color: #bdc3c7;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .current-weather {
+    padding: 20px;
+
+    .weather-info {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+
+      .weather-main {
+        .temperature {
+          font-size: 3rem;
+        }
+
+        img {
+          width: 80px;
+          height: 80px;
+        }
+      }
+    }
+  }
+}
