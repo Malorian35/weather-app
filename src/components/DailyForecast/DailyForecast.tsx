@@ -1,65 +1,52 @@
 import React from 'react';
-import { DailyForecastData, Weather } from '../../types/weatherTypes';
+import { DailyForecastData } from '../../types/weatherTypes';
 import './DailyForecast.scss';
 
-interface DailyForecastComponentProps {
+interface DailyForecastProps {
   forecast: DailyForecastData[];
 }
 
-const DailyForecastComponent: React.FC<DailyForecastComponentProps> = ({ forecast }) => {
+const DailyForecast: React.FC<DailyForecastProps> = ({ forecast }) => {
   const formatDate = (timestamp: number): string => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString('ru-RU', { 
-      weekday: 'long', 
+      weekday: 'short', 
       day: 'numeric', 
       month: 'short' 
     });
   };
 
-  if (!forecast?.length) {
-    return <div className="daily-forecast error">Нет данных прогноза</div>;
-  }
-
   return (
     <div className="daily-forecast">
-      <h2>Прогноз на 7 дней</h2>
-      <div className="forecast-container">
-        {forecast.slice(0, 7).map((day) => {
-          const weather: Weather = day.weather[0];
-          const iconUrl = `https://openweathermap.org/img/wn/${weather.icon}@2x.png`;
-
-          return (
-            <div key={day.dt} className="forecast-day">
-              <div className="day-header">
-                <h3>{formatDate(day.dt)}</h3>
-                <img src={iconUrl} alt={weather.description} />
+      <h2>Прогноз на 5 дней</h2>
+      <div className="forecast-grid">
+        {forecast.map((day) => (
+          <div key={day.dt} className="forecast-card">
+            <h3>{formatDate(day.dt)}</h3>
+            <img 
+              src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`} 
+              alt={day.weather[0].description}
+              className="weather-icon"
+            />
+            <div className="temp-container">
+              <span className="temp-day">{Math.round(day.temp.day)}°</span>
+              <div className="temp-night-container">
+                <span className="temp-night">{Math.round(day.temp.night)}°</span>
+                <span className="temp-minmax">
+                  {Math.round(day.temp.min)}°/{Math.round(day.temp.max)}°
+                </span>
               </div>
-              <div className="day-temperatures">
-                <div className="temp-day">
-                  <span>Днём: </span>
-                  {Math.round(day.temp.day)}°C
-                </div>
-                <div className="temp-night">
-                  <span>Ночью: </span>
-                  {Math.round(day.temp.night)}°C
-                </div>
-              </div>
-              <div className="day-wind">
-                <span>Ветер: </span>
-                {Math.round(day.wind_speed)} м/с
-              </div>
-              {day.summary && (
-                <div className="day-summary">
-                  <span>Общее: </span>
-                  {day.summary}
-                </div>
-              )}
             </div>
-          );
-        })}
+            <div className="weather-details">
+              <p>Ветер: {day.wind_speed} м/с</p>
+              <p>Влажность: {day.humidity}%</p>
+              <p className="weather-desc">{day.weather[0].description}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-export default DailyForecastComponent;
+export default DailyForecast;

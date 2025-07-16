@@ -1,26 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { fetchWeatherData } from './api/weatherApi';
-import Loader from './components/Loader/Loader';
 import LocationSelector from './components/LocationSelector/LocationSelector';
 import CurrentWeather from './components/CurrentWeather/CurrentWeather';
 import DailyForecast from './components/DailyForecast/DailyForecast';
-import { WeatherApiResponse } from './types/weatherTypes';
-import './App.scss';
+import './App.css';
 
 const App: React.FC = () => {
-  const [weatherData, setWeatherData] = useState<WeatherApiResponse | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [weatherData, setWeatherData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchWeather = async (lat: number = 44.6167, lon: number = 33.5254) => {
     setLoading(true);
-    setError('');
+    setError(null);
     try {
       const data = await fetchWeatherData(lat, lon);
       setWeatherData(data);
     } catch (err) {
-      console.error('Error:', err);
-      setError(err instanceof Error ? err.message : 'Неизвестная ошибка');
+      setError('Failed to fetch weather data');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -34,23 +32,20 @@ const App: React.FC = () => {
     <div className="app">
       <header>
         <h1>Прогноз погоды</h1>
+        <LocationSelector onSelect={fetchWeather} />
       </header>
       
       <main>
-        <LocationSelector onSelect={fetchWeather} />
-        {loading && <Loader />}
-        {error && <div className="error-message">{error}</div>}
+        {loading && <div className="loader">Загрузка...</div>}
+        {error && <div className="error">{error}</div>}
+        
         {weatherData && !loading && (
           <>
-            <CurrentWeather data={{ ...weatherData.current, name: weatherData.current.name || 'Севастополь' }} />
+            <CurrentWeather current={weatherData.current} />
             <DailyForecast forecast={weatherData.daily} />
           </>
         )}
       </main>
-      
-      <footer>
-        <p>Данные предоставлены OpenWeatherMap</p>
-      </footer>
     </div>
   );
 };
